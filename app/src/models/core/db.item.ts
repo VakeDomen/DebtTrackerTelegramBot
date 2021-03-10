@@ -1,4 +1,4 @@
-const uuidv4 = require('uuid/v4');
+import { v4 as uuidv4 } from 'uuid';
 
 export class DbItem {
 
@@ -10,7 +10,8 @@ export class DbItem {
 		}
 	}
 	generateId(): DbItem {
-		this.id = uuidv4();return this;
+		this.id = uuidv4();
+		return this;
 	}
 	isEmpty(): boolean {
 		for (let data in this){

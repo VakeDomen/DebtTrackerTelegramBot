@@ -16,6 +16,7 @@ exports.up = function(db, callback) {
   async.series([
     db.createTable.bind(db, 'ledger', ledger),
     db.createTable.bind(db, 'transactions', transactions),
+    db.createTable.bind(db, 'users', users),
   ], callback);
 };
 
@@ -23,6 +24,7 @@ exports.down = function(db, callback) {
   async.series([
     db.dropTable.bind(db, 'ledger'),
     db.dropTable.bind(db, 'transactions'),
+    db.dropTable.bind(db, 'users'),
   ], callback);
 };
 
@@ -57,11 +59,14 @@ const transactions = {
       primaryKey: true,
       autoIncrement: false
     },
+    tip: {
+      type: 'string',
+    },
     kdo: {
       type: 'string',
     },
     komu: {
-      type: 'string'
+      type: 'string',
     },
     vsota: {
       type: 'real',
@@ -72,6 +77,23 @@ const transactions = {
     created: {
       type: 'datetime',
     },
+  }, 
+  ifNotExists: true
+};
+
+const users = {
+  columns: {
+    id: {
+      type: 'string',
+      primaryKey: true,
+      autoIncrement: false
+    },
+    telegram_id: {
+      type: 'string',
+    },
+    name: {
+      type: 'string'
+    }
   }, 
   ifNotExists: true
 };

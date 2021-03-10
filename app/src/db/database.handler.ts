@@ -1,23 +1,22 @@
 import { DbItem } from '../models/core/db.item';
 import * as config from './database.config.json';
 require('dotenv').config();
-var mysql = require('mysql');
+var mysql = require('mysql2/promise');
 
-var connection = mysql.createConnection({
+console.log("Connecting to mysql database...");
+var connection = mysql.createPool({
   host     : process.env.MYSQL_HOST,
   user     : process.env.MYSQL_USER,
   password : process.env.MYSQL_PASSWORD,
   database : process.env.MYSQL_DATABASE
 });
-console.log("Connecting to mysql database...");
-connection.connect();
 console.log("Connecting to mysql database sucessfull!");
 
 export async function query<T>(query: string): Promise<T[]> {
 	if (config.log) {
 		console.log(query);
 	}
-	return await connection.query(query);
+	return (await connection.query(query))[0];
 }
 export async function fetch<T>(table: string, filter: DbItem): Promise<T[]> {
 	return query<T>('SELECT * FROM ' + table + ' WHERE ' + filter.whereString() + ';');

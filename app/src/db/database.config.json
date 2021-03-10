@@ -1,4 +1,8 @@
 {
-  "tables": {},
+  "tables": {
+    "users": "users",
+    "ledger": "ledger",
+    "transactions": "transactions"
+  },
   "log": true
 }
