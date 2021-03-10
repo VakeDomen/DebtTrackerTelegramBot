@@ -2,6 +2,8 @@ import { Telegraf } from 'telegraf';
 import * as dotenv from 'dotenv';
 import { onStart } from './controllers/start.controller';
 import { onHelp } from './controllers/help.controller';
+import { onPay } from './controllers/payment.controller';
+import { onBalance } from './controllers/balance.controller';
 
 let bot: Telegraf;
 
@@ -28,6 +30,8 @@ function initBot(): void {
     bot = new Telegraf(process.env.BOT_TOKEN || '');
     bot.start(onStart);
     bot.command('help', onHelp);
+    bot.command('pay', onPay);
+    bot.command('balance', onBalance);
     console.log("Bot set up!");
 }
 

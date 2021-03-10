@@ -6,7 +6,7 @@ import { DbItem } from '../models/core/db.item';
 
 let isStarted: boolean = false;
 
-export async function onStart(ctx) {
+export async function onStart(ctx: any): Promise<void> {
     if (!isStarted) {
         ctx.reply(`Hello ${ctx.message.chat.title}!`);
         ctx.reply(`I'm setting things up, gimme a sec...`);
@@ -29,7 +29,7 @@ async function createLedger(): Promise<void> {
         for (const ledger of ledgers) {
             let found = false;
             for (const existingLedger of existingLedgers) {
-                if (ledger.kdo === existingLedger.kdo && ledger.komu === existingLedger.komu) {
+                if (ledger.dolznik === existingLedger.dolznik && ledger.upnik === existingLedger.upnik) {
                     found = true;
                     break;
                 }
@@ -73,8 +73,8 @@ function createEmptyLedgers(existingUsers: User[]): Ledger[] {
         for (const user2 of existingUsers) {
             if (user1.id !== user2.id) {
                 const ledger = new Ledger({
-                    kdo: user1.id,
-                    komu: user2.id,
+                    dolznik: user1.id,
+                    upnik: user2.id,
                     vsota: 0,
                 });
                 ledger.generateId();

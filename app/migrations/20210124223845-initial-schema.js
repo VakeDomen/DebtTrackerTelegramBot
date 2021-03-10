@@ -39,10 +39,10 @@ const ledger = {
       primaryKey: true,
       autoIncrement: false
     },
-    kdo: {
+    dolzink: {
       type: 'string',
     },
-    komu: {
+    upnik: {
       type: 'string',
     },
     vsota: {

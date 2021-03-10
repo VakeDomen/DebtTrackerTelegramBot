@@ -1,14 +1,13 @@
 import { DbItem } from './core/db.item';
 
 export class Ledger extends DbItem {
-    kdo: string;
-    komu: string;
+    dolznik: string;
+    upnik: string;
     vsota: number;
-
     constructor(data: any) {
         super(data);
-        this.kdo = data.kdo;
-        this.komu = data.komu;
+        this.dolznik = data.dolznik;
+        this.upnik = data.upnik;
         this.vsota = data.vsota;
     }
 }
