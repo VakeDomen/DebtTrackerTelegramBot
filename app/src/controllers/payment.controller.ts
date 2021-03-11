@@ -29,11 +29,12 @@ export async function onPay(ctx: any): Promise<void> {
         recipientsTelegramIds = (await fetchAll<User>(conf.tables.users)).map((user: User) => { return user.telegram_id });
     }
     const recipients: User[] = await Promise.all(recipientsTelegramIds.map(async (recipientId: any) => { return await findUserByTelegramId(recipientId) }));
+    const description = extractDescription(ctx, recipientsTelegram);
     let payments: Transaction[] = [];
     if (textArray[1] == 'debt') {
-        payments = await repayDebtFull(sender, recipients);
+        payments = await repayDebtFull(sender, recipients, description);
     } else {
-        payments = await repayDebt(sender, recipients, textArray[1]);
+        payments = await repayDebt(sender, recipients, description, textArray[1]);
     }
     if (payments && payments.length > 0) {
         payments.map(async (payment: Transaction) => {
@@ -44,7 +45,13 @@ export async function onPay(ctx: any): Promise<void> {
     }
 }
 
-async function repayDebtFull(sender: User, recipients: User[]): Promise<Transaction[]> {
+function extractDescription(ctx: any, numOfMentions: number): string {
+    const text: string[] =  ctx.message.text.split(' ');
+    console.log(text.slice(numOfMentions + 1, text.length - 1));
+    return text.slice(numOfMentions + 1, text.length).join(' ');
+}
+
+async function repayDebtFull(sender: User, recipients: User[], description: string): Promise<Transaction[]> {
     const transactions: Transaction[] = await Promise.all(recipients.map(async (recipient: User) => {
         const ledger = await findLedgersByDolznikiAndUpniki([recipient], [sender]);
         const transaction = new Transaction({
@@ -52,7 +59,7 @@ async function repayDebtFull(sender: User, recipients: User[]): Promise<Transact
             kdo: sender.id,
             komu: recipient.id,
             vsota: ledger[0].vsota,
-            description: '',
+            description: description,
         });
         transaction.generateId();
         return transaction;
@@ -61,14 +68,14 @@ async function repayDebtFull(sender: User, recipients: User[]): Promise<Transact
     return transactions;
 }
 
-async function repayDebt(sender: User, recipients: User[], fee: number): Promise<Transaction[]> {
+async function repayDebt(sender: User, recipients: User[],description: string, fee: number): Promise<Transaction[]> {
     const transactions: Transaction[] = recipients.map((recipient: User) => {
         const transaction = new Transaction({
             tip: 'payment',
             kdo: sender.id,
             komu: recipient.id,
             vsota: fee,
-            description: '',
+            description: description,
         });
         transaction.generateId();
         return transaction;

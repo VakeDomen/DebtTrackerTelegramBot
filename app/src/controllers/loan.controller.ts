@@ -27,13 +27,13 @@ export async function onLoan(ctx: any): Promise<void> {
         recipientsTelegramIds = (await fetchAll<User>(conf.tables.users)).map((user: User) => { return user.telegram_id });
     }
     const recipients: User[] = await Promise.all(recipientsTelegramIds.map(async (recipientId: any) => { return await findUserByTelegramId(recipientId) }));
+    const description = extractDescription(ctx, recipientsTelegram);
     const sender = await findUserByTelegramId(ctx.from.id);
-    const description = extractDescription(ctx);
     const fee = extractFee(textArray[1], recipients);
     let payments: Transaction[] = await createLoans(sender, recipients, fee, description);
     payments.map(async (payment: Transaction) => {
         ctx.reply(`${sender.name} loaned ${(await findUserById(payment.komu)).name} ${payment.vsota}€!`);
-    })
+    });
 }
 
 async function createLoans(sender: User, recipients: User[], fee: number, description: string): Promise<Transaction[]> {
@@ -53,8 +53,10 @@ async function createLoans(sender: User, recipients: User[], fee: number, descri
 
 }
 
-function extractDescription(ctx: any): string {
-    return 'Loan';
+function extractDescription(ctx: any, numOfMentions: number): string {
+    const text: string[] =  ctx.message.text.split(' ');
+    console.log(text.slice(numOfMentions + 1, text.length - 1));
+    return text.slice(numOfMentions + 1, text.length).join(' ');
 }
 
 function extractFee(fee: string, recipients: User[]): number {
