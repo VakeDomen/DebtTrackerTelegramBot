@@ -9,7 +9,7 @@ export async function onLoan(ctx: any): Promise<void> {
     const recipientsTelegram = ctx.message.entities.filter((entity: any) => entity.type === 'text_mention');
     const textArray = ctx.message.text.split(' ');
     if (textArray.length < 3) {
-        ctx.reply("Please specify who you want to lend the fee and the ammount. For more help type /help.");
+        ctx.reply("Please specify who you want to lend the fee and the amount. For more help type /help.");
         return;
     }
     if ((!recipientsTelegram || recipientsTelegram.length == 0) && !(textArray.length == 3 && textArray[2] == 'all')) {
@@ -58,5 +58,5 @@ function extractDescription(ctx: any): string {
 }
 
 function extractFee(fee: string, recipients: User[]): number {
-    return Number((Number(fee) / recipients.length).toFixed(2));
+    return +(Number(fee) / recipients.length).toFixed(2);
 }

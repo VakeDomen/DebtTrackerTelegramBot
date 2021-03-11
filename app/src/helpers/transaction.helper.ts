@@ -20,7 +20,6 @@ export async function executeTransaction(transaction: Transaction): Promise<bool
 }
 
 async function executeLoan(transaction: Transaction): Promise<boolean> {
-    console.log(`Fetching ledger for transaction ${transaction.id}...`);
     const ledger = (await findLedgersByDolznikiAndUpniki(
         [await findUserById(transaction.komu)],
         [await findUserById(transaction.kdo)], 
@@ -37,7 +36,6 @@ async function executeLoan(transaction: Transaction): Promise<boolean> {
 }
 
 async function executePayment(transaction: Transaction): Promise<boolean> {
-    console.log(`Fetching ledger for transaction ${transaction.id}...`);
     const ledger = (await findLedgersByDolznikiAndUpniki(
         [await findUserById(transaction.kdo)], 
         [await findUserById(transaction.komu)],

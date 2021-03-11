@@ -37,10 +37,10 @@ export async function onPay(ctx: any): Promise<void> {
     }
     if (payments && payments.length > 0) {
         payments.map(async (payment: Transaction) => {
-            ctx.reply(`${sender.name} repayed ${(await findUserById(payment.komu)).name} ${payment.vsota}€!`);
+            ctx.reply(`${sender.name} repaid ${(await findUserById(payment.komu)).name} ${payment.vsota}€!`);
         })
     } else {
-        ctx.reply('No debt was repayed...');
+        ctx.reply('No debt was repaid...');
     }
 }
 

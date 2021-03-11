@@ -4,5 +4,5 @@
     "ledger": "ledger",
     "transactions": "transactions"
   },
-  "log": true
+  "log": false
 }
