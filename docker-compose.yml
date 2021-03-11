@@ -17,7 +17,7 @@ services:
       - internal
   server:
     container_name: debt_tracker_server
-    restart: "unless-stopped"
+    restart: "always"
     build:
       context: .
       dockerfile: ./dockerfiles/Dockerfile.server
