@@ -39,14 +39,14 @@ const ledger = {
       primaryKey: true,
       autoIncrement: false
     },
-    dolzink: {
+    dolznik: {
       type: 'string',
     },
     upnik: {
       type: 'string',
     },
     vsota: {
-      type: 'string',
+      type: 'real',
     }
   },
   ifNotExists: true

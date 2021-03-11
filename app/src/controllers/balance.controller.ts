@@ -1,6 +1,5 @@
 import { fetchAll } from '../db/database.handler';
 import * as conf from '../db/database.config.json';
-import { User } from '../models/user';
 import { Ledger } from '../models/ledger';
 import { findUserById } from '../helpers/users.helper';
 

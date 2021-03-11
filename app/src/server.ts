@@ -4,6 +4,7 @@ import { onStart } from './controllers/start.controller';
 import { onHelp } from './controllers/help.controller';
 import { onPay } from './controllers/payment.controller';
 import { onBalance } from './controllers/balance.controller';
+import { onLoan } from './controllers/loan.controller';
 
 let bot: Telegraf;
 
@@ -32,6 +33,7 @@ function initBot(): void {
     bot.command('help', onHelp);
     bot.command('pay', onPay);
     bot.command('balance', onBalance);
+    bot.command('loan', onLoan);
     console.log("Bot set up!");
 }
 
