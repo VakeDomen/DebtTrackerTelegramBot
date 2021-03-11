@@ -10,7 +10,7 @@ export async function onPay(ctx: any): Promise<void> {
     const sender = await findUserByTelegramId(ctx.from.id);
     const recipientsTelegram = ctx.message.entities.filter((entity: any) => entity.type === 'text_mention');
     const textArray = ctx.message.text.split(' ');
-    if (textArray.length > 3) {
+    if (textArray.length < 3) {
         ctx.reply("Please specify who you want to pay and the fee. For more help type /help.");
         return;
     }

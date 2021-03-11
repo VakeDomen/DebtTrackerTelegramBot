@@ -49,7 +49,7 @@ async function executePayment(transaction: Transaction): Promise<boolean> {
     if (ledger && reverseLedger) {
         console.log(`Executing transaction ${transaction.id}...`);
         const overpay = ledger.vsota < transaction.vsota ? transaction.vsota - ledger.vsota : 0;
-        ledger.vsota = ledger.vsota < transaction.vsota ? ledger.vsota - transaction.vsota : 0;
+        ledger.vsota = ledger.vsota < transaction.vsota ? 0 : ledger.vsota - transaction.vsota;
         reverseLedger.vsota += overpay;
         await update(conf.tables.ledger, new Ledger(ledger));
         await update(conf.tables.ledger, new Ledger(reverseLedger));
