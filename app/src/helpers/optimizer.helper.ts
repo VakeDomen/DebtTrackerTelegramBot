@@ -12,14 +12,14 @@ async function resolveBiDirectionalDebts(): Promise<void> {
     const users = await fetchAll<User>(conf.tables.users);
     const ledgers = await fetchAll<Ledger>(conf.tables.ledger);
     const graph = new Graph(users, ledgers);
-    graph.resolveBiDirectionalLoans();
+    await graph.resolveBiDirectionalLoans();
 }
 
 async function resolveCyclicDebts(): Promise<void> {
     const users = await fetchAll<User>(conf.tables.users);
     const ledgers = await fetchAll<Ledger>(conf.tables.ledger);
     const graph = new Graph(users, ledgers);
-    graph.resolveCyclicDebts();
+    await graph.resolveCyclicDebts();
 }
 
 class Graph {
