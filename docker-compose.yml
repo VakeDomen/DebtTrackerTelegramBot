@@ -9,11 +9,19 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    ports:
-      - "3306:3306"
+#    ports:
+#      - "3306:3306"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.debt_mysql.rule=Host(`${DOMAIN_MYSQL}`)
+      - traefik.http.routers.debt_mysql.entrypoints=websecure
+      - traefik.http.routers.debt_mysql.tls=true
+      - traefik.http.routers.debt_mysql.tls.certresolver=le
+      - traefik.http.services.debt_mysql.loadbalancer.server.port=3306
     volumes:
       - dbdata:/var/lib/mysql
     networks: 
+      - proxy
       - internal
   server:
     container_name: debt_tracker_server
@@ -44,14 +52,25 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     restart: always
-    ports:
-      - 8080:80
+#    ports:
+#      - 8080:80
     networks:
       - internal
+      - proxy
       - exposed
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.debt_phpmyadmin.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.debt_phpmyadmin.entrypoints=websecure
+      - traefik.http.routers.debt_phpmyadmin.tls=true
+      - traefik.http.routers.debt_phpmyadmin.tls.certresolver=le
+      - traefik.http.services.debt_phpmyadmin.loadbalancer.server.port=80
+
 volumes:
   dbdata:
 networks:
+  proxy:
+    external: true
   internal: 
     internal: true
   exposed:

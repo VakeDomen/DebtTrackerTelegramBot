@@ -28,6 +28,6 @@ async function constructMessages(transactions: Transaction[]): Promise<any[]> {
 async function generateMessage(transaction: Transaction): Promise<any> {
     const kdo = await findUserById(transaction.kdo);
     const komu = await findUserById(transaction.komu);
-    return `----- ${transaction.created.toDateString()} ${transaction.created.toLocaleTimeString()} -----\n\t${transaction.tip.toUpperCase()}\n\t${kdo.name}\t->\t${komu.name} (${transaction.vsota}€)\n\tDESCRIPTION: \t${transaction.description}\n\n`;
+    return `----- ${transaction.created.toDateString()} ${transaction.created.toLocaleTimeString()} -----\n\t${transaction.tip.toUpperCase()}\n\t${kdo.name}\t->\t${komu.name} (${transaction.vsota}€)\n\tDESCRIPTION: \t${decodeURI(transaction.description)}\n\n`;
     //return ledger;
 }

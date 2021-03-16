@@ -4,11 +4,8 @@ import { Ledger } from "../models/ledger";
 import { User } from "../models/user";
 
 export async function optimiseLedgers(ctx: any): Promise<void> {
-    await ctx.reply(`Gimme a sec..resolving bi-directional debts...`);
     await resolveBiDirectionalDebts();
-    await ctx.reply(`Now resolving cyclic debts...`);
     await resolveCyclicDebts();
-    await ctx.reply(`All done!`);
 }
 
 async function resolveBiDirectionalDebts(): Promise<void> {
@@ -127,6 +124,8 @@ class Node {
             const backwardsDebt = connection?.ledgers.get(me)?.vsota
             if (forwardDebt && backwardsDebt && forwardDebt > 0 && backwardsDebt > 0) {
                 const diff = Math.min(forwardDebt, backwardsDebt);
+		console.log(`Resolving bi-directional debt between connections ${me} and ${connection.user.id as string}`);
+		console.log(`Diff: ${diff}`);
                 await this.reduceDeptBiDirectional(connectionId, diff);
             }
         }
@@ -153,8 +152,8 @@ class Node {
         const connection = this.connections.get(connectionId);
         const backwadsLedger = connection?.ledgers.get(this.user.id as string);
         if (forwardLedger && backwadsLedger) {
-            forwardLedger.vsota -= reduction;
-            backwadsLedger.vsota -= reduction;
+            forwardLedger.vsota = Number((forwardLedger.vsota - reduction).toFixed(2));
+            backwadsLedger.vsota = Number((backwadsLedger.vsota - reduction).toFixed(2));
             await update(conf.tables.ledger, new Ledger(forwardLedger));
             await update(conf.tables.ledger, new Ledger(backwadsLedger));
             if (backwadsLedger.vsota == 0) {

@@ -48,7 +48,7 @@ export async function onPay(ctx: any): Promise<void> {
 function extractDescription(ctx: any, numOfMentions: number): string {
     const text: string[] =  ctx.message.text.split(' ');
     console.log(text.slice(numOfMentions + 1, text.length - 1));
-    return text.slice(numOfMentions + 1, text.length).join(' ');
+    return encodeURI(text.slice(numOfMentions + 1, text.length).join(' '));
 }
 
 async function repayDebtFull(sender: User, recipients: User[], description: string): Promise<Transaction[]> {

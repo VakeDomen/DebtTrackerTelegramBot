@@ -56,7 +56,7 @@ async function createLoans(sender: User, recipients: User[], fee: number, descri
 function extractDescription(ctx: any, numOfMentions: number): string {
     const text: string[] =  ctx.message.text.split(' ');
     console.log(text.slice(numOfMentions + 1, text.length - 1));
-    return text.slice(numOfMentions + 1, text.length).join(' ');
+    return encodeURI(text.slice(numOfMentions + 1, text.length).join(' '));
 }
 
 function extractFee(fee: string, recipients: User[]): number {

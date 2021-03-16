@@ -9,10 +9,7 @@ export async function onBalance(ctx: any): Promise<void> {
     const ledgers = await fetchAll<Ledger>(conf.tables.ledger);
     const messages = await constructMessages(ledgers);
     if (messages.length > 0) {
-        for (const message of messages) {
-            await ctx.reply(message);
-        }
-        await ctx.reply('That would be all...');
+        await ctx.replyWithMarkdown('\`\`\`\n' + messages.join('\n') + '\`\`\`');
     } else {
         await ctx.reply('No debt....very nice!');
     }
