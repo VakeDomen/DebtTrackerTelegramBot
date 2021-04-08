@@ -9,17 +9,21 @@ export async function optimiseLedgers(ctx: any): Promise<void> {
 }
 
 async function resolveBiDirectionalDebts(): Promise<void> {
+    console.log("Resolving bi-directional loans...");
     const users = await fetchAll<User>(conf.tables.users);
     const ledgers = await fetchAll<Ledger>(conf.tables.ledger);
     const graph = new Graph(users, ledgers);
     await graph.resolveBiDirectionalLoans();
+    console.log("Resolved bi-directional loans!")
 }
 
 async function resolveCyclicDebts(): Promise<void> {
+    console.log("Resolving cyclic loans...");
     const users = await fetchAll<User>(conf.tables.users);
     const ledgers = await fetchAll<Ledger>(conf.tables.ledger);
     const graph = new Graph(users, ledgers);
     await graph.resolveCyclicDebts();
+    console.log("Resolved cyclic loans!");
 }
 
 class Graph {
@@ -64,7 +68,7 @@ class Graph {
                     break;
                 }
             }
-            if (result.length > 2) {
+            if (found && result.length > 2) {
                 console.log(result);
                 await this.reduceDebtCyclic(result);
             }
@@ -87,6 +91,7 @@ class Graph {
         for (let index = 0 ; index < nodes.length - 1 ; index++) {
             const ledger = nodes[index].ledgers.get(nodes[index + 1].user.id as string) as Ledger;
             ledger.vsota -= minDebt;
+            ledger.vsota = Number(ledger.vsota.toFixed(2));
             if (ledger.vsota == 0) {
                 nodes[index].disconnect(nodes[index + 1].user.id as string);
             }
