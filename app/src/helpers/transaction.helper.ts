@@ -32,8 +32,11 @@ export async function agreagteTransactions(tip: 'loan' | 'borrow'): Promise<[str
             agreg[transaction[target]][2]++;
         }
     }
-    console.log([...agreg])
-    return [...agreg];
+    const out: [string, number, number][] = [];
+    for (const index in agreg) {
+        out.push(agreg[index]);
+    }
+    return out;
 }
 
 async function executeLoan(transaction: Transaction): Promise<boolean> {
