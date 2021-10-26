@@ -60,6 +60,7 @@ async function repayDebtFull(sender: User, recipients: User[], description: stri
             komu: recipient.id,
             vsota: ledger[0].vsota,
             description: description,
+            created: new Date().toISOString().slice(0, 19).replace('T', ' '),
         });
         transaction.generateId();
         return transaction;
@@ -76,6 +77,7 @@ async function repayDebt(sender: User, recipients: User[],description: string, f
             komu: recipient.id,
             vsota: fee,
             description: description,
+            created: new Date().toISOString().slice(0, 19).replace('T', ' '),
         });
         transaction.generateId();
         return transaction;

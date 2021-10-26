@@ -12,9 +12,7 @@
     "url": "git+https://github.com/VakeDomen/AvtoNetScraperTelgramBot.git"
   },
   "keywords": [
-    "telegram",
-    "avto.net",
-    "scraper"
+    "telegram"
   ],
   "author": "VakeDomen",
   "license": "ISC",

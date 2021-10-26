@@ -15,6 +15,6 @@ export class Transaction extends DbItem {
         this.komu = data.komu;
         this.vsota = data.vsota;
         this.description = data.description;
-        this.created = data.created ? data.created : new Date().toISOString().slice(0, 19).replace('T', ' ');;
+        this.created = data.created;;
     }
 }

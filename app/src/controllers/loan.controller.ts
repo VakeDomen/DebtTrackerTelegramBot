@@ -44,6 +44,7 @@ async function createLoans(sender: User, recipients: User[], fee: number, descri
             komu: recipient.id,
             vsota: fee,
             description: description,
+            created: new Date().toISOString().slice(0, 19).replace('T', ' '),
         });
         transaction.generateId();
         return transaction;
