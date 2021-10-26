@@ -19,17 +19,20 @@ export async function executeTransaction(transaction: Transaction): Promise<bool
     }
 }
 
-export async function agreagteTransactions(tip: 'loan' | 'borrow'): Promise<[string, number][]> {
+export async function agreagteTransactions(tip: 'loan' | 'borrow'): Promise<[string, number, number][]> {
     const transactions = await fetch<Transaction>(conf.tables.transactions, new Transaction({ tip: 'loan' }));
-    const agreg: [string, number][] = [];
+    const agreg: [string, number, number][] = [];
     const target = tip == 'loan' ? 'kdo' : 'komu';
+    console.log(transactions);
     for (const transaction of transactions) {
         if (!agreg[transaction[target]]) {
-            agreg[transaction[target]] = [transaction[target], transaction.vsota];
+            agreg[transaction[target]] = [transaction[target], transaction.vsota, 0];
         } else {
             agreg[transaction[target]][1] += transaction.vsota;
+            agreg[transaction[target]][2]++;
         }
     }
+    console.log([...agreg])
     return [...agreg];
 }
 

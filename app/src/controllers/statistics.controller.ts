@@ -10,7 +10,7 @@ export async function onStats(ctx: any): Promise<void> {
 
     messages.push('------- TOTAL BORROWS -------');
     const borrows = await agreagteTransactions('borrow');
-    messages.push(...(await constructMessagesBorrow(loans)));
+    messages.push(...(await constructMessagesBorrow(borrows)));
 
     if (messages.length > 0) {
         await ctx.replyWithMarkdown('\`\`\`\n' + messages.join('\n') + '\`\`\`');
@@ -19,9 +19,9 @@ export async function onStats(ctx: any): Promise<void> {
     }
 }
 
-async function constructMessagesLoan(loans:  [string, number][]): Promise<string[]> {
+async function constructMessagesLoan(loans:  [string, number, number][]): Promise<string[]> {
     const messages: string[] = [];
-    loans = loans.sort((t1: [string, number], t2: [string, number]) => t2[0] > t1[0] ? 1 : -1);
+    loans = loans.sort((t1: [string, number, number], t2: [string, number, number]) => t2[0] > t1[0] ? 1 : -1);
     for (const loan of loans) {
         if (loan[1] > 0) {
             messages.push(await generateMessageLoan(loan));
@@ -30,9 +30,9 @@ async function constructMessagesLoan(loans:  [string, number][]): Promise<string
     return messages;
 }
 
-async function constructMessagesBorrow(loans:  [string, number][]): Promise<string[]> {
+async function constructMessagesBorrow(loans:  [string, number, number][]): Promise<string[]> {
     const messages: string[] = [];
-    loans = loans.sort((t1: [string, number], t2: [string, number]) => t2[0] > t1[0] ? 1 : -1);
+    loans = loans.sort((t1: [string, number, number], t2: [string, number, number]) => t2[0] > t1[0] ? 1 : -1);
     for (const loan of loans) {
         if (loan[1] > 0) {
             messages.push(await generateMessageBorrow(loan));
@@ -41,14 +41,16 @@ async function constructMessagesBorrow(loans:  [string, number][]): Promise<stri
     return messages;
 }
 
-async function generateMessageLoan(loan: [string, number]): Promise<string> {
+async function generateMessageLoan(loan: [string, number, number]): Promise<string> {
     const upnik = await findUserById(loan[0]);
     const totalLoan = loan[1];
-    return `${upnik} loaned ${totalLoan.toFixed(2)}€`;
+    const loanTimes = loan[2];
+    return `${upnik} loaned ${totalLoan.toFixed(2)}€ (${loanTimes}x)`;
 }
 
-async function generateMessageBorrow(loan: [string, number]): Promise<string> {
+async function generateMessageBorrow(loan: [string, number, number]): Promise<string> {
     const dolznik = await findUserById(loan[0]);
     const totalLoan = loan[1];
-    return `${dolznik} borrowed ${totalLoan.toFixed(2)}€`;
+    const loanTimes = loan[2];
+    return `${dolznik} borrowed ${totalLoan.toFixed(2)}€ (${loanTimes}x)`;
 }
