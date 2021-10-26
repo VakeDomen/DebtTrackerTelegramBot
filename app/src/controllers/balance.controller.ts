@@ -17,7 +17,7 @@ export async function onBalance(ctx: any): Promise<void> {
 
 async function constructMessages(ledgers: Ledger[]): Promise<string[]> {
     const messages: string[] = [];
-    ledgers = ledgers.sort((l1: Ledger, l2: Ledger) => l2.dolznik < l1.dolznik ? 1 : -1);
+    ledgers = ledgers.sort((l1: Ledger, l2: Ledger) => l2.dolznik > l1.dolznik ? 1 : -1);
     for (const ledger of ledgers) {
         if (ledger.vsota > 0) {
             messages.push(await generateMessage(ledger));
