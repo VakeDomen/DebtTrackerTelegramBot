@@ -45,12 +45,12 @@ async function generateMessageLoan(loan: [string, number, number]): Promise<stri
     const upnik = await findUserById(loan[0]);
     const totalLoan = loan[1];
     const loanTimes = loan[2];
-    return `${upnik} loaned ${totalLoan.toFixed(2)}€ (${loanTimes}x)`;
+    return `${upnik.name} loaned ${totalLoan.toFixed(2)}€ (${loanTimes}x)`;
 }
 
 async function generateMessageBorrow(loan: [string, number, number]): Promise<string> {
     const dolznik = await findUserById(loan[0]);
     const totalLoan = loan[1];
     const loanTimes = loan[2];
-    return `${dolznik} borrowed ${totalLoan.toFixed(2)}€ (${loanTimes}x)`;
+    return `${dolznik.name} borrowed ${totalLoan.toFixed(2)}€ (${loanTimes}x)`;
 }
