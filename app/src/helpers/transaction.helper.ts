@@ -1,4 +1,4 @@
-import { insert, update } from '../db/database.handler';
+import { fetch, insert, update } from '../db/database.handler';
 import * as conf from '../db/database.config.json';
 import { Ledger } from '../models/ledger';
 import { Transaction } from '../models/transaction';
@@ -17,6 +17,22 @@ export async function executeTransaction(transaction: Transaction): Promise<bool
         case 'payment':
             return await executePayment(transaction);
     }
+}
+
+export async function agreagteTransactions(tip: 'loan' | 'payment'): Promise<[string, number][]> {
+    const transactions = await fetch<Transaction>(conf.tables.transactions, new Transaction({tip: 'loan'}));
+    if (!transactions) {
+        return [];
+    }
+    const agreg: [string, number][] = [];
+    for (const transaction of transactions) {
+        if (!agreg[transaction.kdo]) {
+            agreg[transaction.kdo] = [transaction.kdo, transaction.vsota];
+        } else {
+            agreg[transaction.kdo][0] += transaction.vsota;
+        }
+    }
+    return [...agreg];
 }
 
 async function executeLoan(transaction: Transaction): Promise<boolean> {
@@ -57,3 +73,5 @@ async function executePayment(transaction: Transaction): Promise<boolean> {
     }
     return false;
 }
+
+
