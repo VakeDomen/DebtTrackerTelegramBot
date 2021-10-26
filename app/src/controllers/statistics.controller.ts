@@ -6,11 +6,10 @@ export async function onStats(ctx: any): Promise<void> {
 
     messages.push('-------- TOTAL LOANS --------');
     const loans = await agreagteTransactions('loan');
-    console.log('loans', loans)
     messages.push(...(await constructMessagesLoan(loans)));
 
     messages.push('------- TOTAL BORROWS -------');
-    const borrows = await agreagteTransactions('payment');
+    const borrows = await agreagteTransactions('borrow');
     messages.push(...(await constructMessagesBorrow(loans)));
 
     if (messages.length > 0) {
